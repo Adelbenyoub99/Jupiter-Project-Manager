@@ -1,0 +1,86 @@
+.main {
+    position: relative;
+    padding-bottom: 200px;
+    overflow: hidden;  
+  }
+  
+  .main::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/bgHomeM.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    opacity: 0.3;
+   
+  } 
+ .main > * {
+    position: relative;
+  }
+  .custom-shape-divider-bottom-1717149053 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    height: 100px;
+   
+  }
+  
+  .custom-shape-divider-bottom-1717149053 svg {
+    position: relative;
+    display: block;
+    width: calc(143% );
+    height: 150px;
+    
+  }
+  
+  .custom-shape-divider-bottom-1717149053 .shape-fill {
+    fill: #e0e0e0;
+  }
+  h1{
+    font-family: "Allerta Stencil", sans-serif;
+    font-weight: 400 ;
+    color: black
+  }
+  .searchForm{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+   background-color: white;
+   height: 50px;
+   padding: 5px;
+   border-radius: 25px;
+  
+  }
+ .searchInput {
+    border: none; /* Supprime la bordure */
+    outline: none; /* Supprime l'outline lors de la sélection */
+    box-shadow: none; /* Supprime l'ombre interne */
+    background: transparent; /* Rend l'arrière-plan transparent */
+  }
+  .searchInput:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+  .searchBtn{
+    background-color: #a3f7af;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    
+  }
+  .searchBtn:hover{
+    background-color: #a3f7af;
+    color: #f6f6f6;
+  }
+  .searchBtn:active{
+    background-color: #a3f7af !important;
+    color: #f6f6f6 !important;
+  }

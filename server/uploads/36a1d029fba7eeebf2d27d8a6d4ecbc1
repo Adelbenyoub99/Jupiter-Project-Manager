@@ -1,0 +1,45 @@
+const { Notification, User } = require('../models');
+
+// Crée une notification
+exports.createNotif = async (req, res) => {
+    try {
+        const { titreNotif, contenuNotif, idUtilisateur } = req.body;
+
+        // Vérifiez si l'utilisateur existe
+        const user = await User.findByPk(idUtilisateur);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
+        }
+
+        const notification = await Notification.create({
+            titreNotif,
+            contenuNotif,
+            idUtilisateur
+        });
+
+        return res.status(201).json(notification);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// Récupère toutes les notifications par identifiant utilisateur
+exports.getAllNotifByIdUser = async (req, res) => {
+    try {
+        const { idUtilisateur } = req.params;
+
+        // Vérifiez si l'utilisateur existe
+        const user = await User.findByPk(idUtilisateur);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
+        }
+
+        const notifications = await Notification.findAll({
+            where: { idUtilisateur }
+        });
+
+        return res.status(200).json(notifications);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

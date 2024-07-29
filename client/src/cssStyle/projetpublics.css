@@ -1,0 +1,129 @@
+.userProfil {
+  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.card {
+  position: relative; /* Make sure the card is positioned relative */
+  border-radius: 15px;
+  overflow: hidden; /* Ensure child elements do not overflow the card's rounded corners */
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    35deg,
+    rgba(131, 212, 199, 1) 1%,
+    rgba(131, 212, 199, 1) 31%,
+    rgba(170, 226, 217, 1) 62%,
+    rgba(224, 238, 236, 1) 93%
+  );
+  opacity: 0.3;
+}
+
+.card-body,
+.card-header {
+  position: relative;
+  z-index: 1;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-text {
+  flex-grow: 1;
+}
+.mainPP {
+  padding-bottom: 0px;
+}
+
+.custom-shape-divider-bottom-1717149053PP {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  height: 60px;
+}
+
+.custom-shape-divider-bottom-1717149053PP svg {
+  position: relative;
+  display: block;
+  width: calc(143%);
+  height: 80px;
+  margin-top: 16px;
+}
+
+.custom-shape-divider-bottom-1717149053PP .shape-fill {
+  fill: #e0e0e0;
+}
+
+.mainPP h1 {
+  color: black;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.btnPP {
+  background-color: #086788;
+  color: white;
+}
+
+.custom-badge {
+  border: 1px solid #a3f7af;
+  background-color: rgba(163, 247, 176, 0.288); /* Reduced opacity */
+  color: #a3f7af; /* Text color */
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+.custom-badgeR {
+  border: 1px solid #e3708f;
+  background-color: #e3708f53 ;
+  color: #f0396a; 
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+.noResultDiv {
+  height: 400px;
+}
+
+.custom-tooltip {
+  background-color: #e0e0e0e0 !important;
+  color: #000 !important;
+  border-radius: 5px;
+}
+.userName {
+  font-family: "Roboto", sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+.userName :hover {
+  text-decoration: underline;
+}
+.copyIcon{
+  cursor: pointer;
+}

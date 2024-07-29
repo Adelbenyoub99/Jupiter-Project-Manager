@@ -1,0 +1,43 @@
+.service {
+    height: 90px; 
+    width: 90px; 
+    background-color: #83d4c692;
+    border-radius: 50%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.serviceContainer {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+.serviceIcons {
+    height: 60px;
+    width: 60px;
+}
+.serviceContainer{
+    max-width: 1000px;
+}
+.serviceFont{
+  font-family: "Allerta Stencil", sans-serif;
+  font-weight: 400;
+  font-style: normal
+}
+@media (max-width: 768px) {
+    .serviceIcons {
+      width: 80px;
+    }
+  
+    .serviceFont {
+      font-size: 1.2rem;
+    }
+  
+    .text-md-left {
+      text-align: center !important;
+    }
+  
+    .text-md-right {
+      text-align: center !important;
+    }
+  }

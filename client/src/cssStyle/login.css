@@ -1,0 +1,91 @@
+.bg {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden; 
+}
+
+.bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../images/loginBG7.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; 
+  opacity: 0.9;
+ 
+}
+
+.loginModel {
+  background-color: rgb(255, 255, 255); 
+  border-radius: 15px;
+  margin: 15px;
+  max-width: 500px;
+  position: relative; 
+  opacity: 0.9;
+  padding: 15px;
+}
+.logo{
+  margin-top: 5px;
+  margin-left: 5px;
+  height: 70px;
+  width: 200px;
+}
+.hdr{
+  padding-top: 15px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  color: black;
+}
+.btn{
+  background-color: #83d4c7;
+  margin-top: 20px;
+  color: black;
+  margin-right: 5px;
+  font-family: "Roboto", sans-serif;
+  font-size: large;
+  font-weight: bold;
+}
+.btn:hover{
+  background-color: #83d4c7;
+  color: #f6f6f6;
+}
+.btn:active{
+  background-color: #83d4c7 !important;
+  color: #f6f6f6 !important;
+}
+
+.form-label{
+  font-family: 'Roboto';
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  color: black;
+  margin-left: 5px;
+  margin-bottom: -1px;
+  margin-top: 15px;
+}
+.form-control:focus {
+  border-color: rgba(131, 212, 199, 0.8); 
+  box-shadow: 0 0 0 0.20rem rgba(131, 212, 199, 0.60);
+}
+.link{
+ 
+  margin-top: 0;
+  font-weight: 500;
+  font-size: small;
+  color: #83d4c7;
+}
+
+.createAccountSeparator{
+  width:60%;
+}
+.closeIcon{
+  width: 15px;
+  height: auto;
+}

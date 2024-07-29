@@ -1,0 +1,149 @@
+.contentContainer{
+  height: 100%;
+  min-height: 100vh;
+}
+
+.addProjectBtn{
+    background-color: #83d4c69b;
+    transform: translateY(-50%);
+    
+}
+.addProjectBtn:hover{
+    background-color: #83d4c7 !important;
+    color: #000000 !important;
+  }
+.addProjectBtn:active{
+    background-color: #83d4c7!important;
+    color: #ffffff !important;
+    transition: color 0.1s ease;
+    border: none;
+
+  }
+
+.navLink{
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  color: #000000;
+}
+.navIcon {
+  font-size: 30px;
+}
+
+.navLabel {
+  font-size: 12px;
+}
+.userNav {
+  width: 80%;
+  margin: 0 auto 20px auto;  /* Centrer horizontalement et ajouter une marge en bas */
+  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  position: fixed;  /* Assurez-vous qu'elle reste en bas de l'écran */
+  left: 50%;  /* Positionnez le centre horizontalement */
+  transform: translateX(-50%);  /* Déplacez vers la gauche pour compenser le décalage */
+  bottom: 0;  /* Assurez-vous qu'elle est collée au bas */
+}
+.navLink{
+  transition: transform 0.2s ease-in-out;
+}
+.navIcon {
+  font-size: 28px !important;
+  transition: color 0.3s ease;
+}
+
+.navLabel {
+  font-size: 14px;
+}
+.navLink:hover{
+  color: #83d4c7;
+  transition: color 0.3s ease;
+  transform: scale(1.05);
+}
+.navLink:active{
+  color: #83d4c7;
+  transform: scale(1.05);
+}
+.navLink:focus-visible {
+  outline: 2px solid #086788; /* Custom focus outline */
+}
+
+.navLink.active, .navLink.active .navIcon, .navLink.active .navLabel {
+  transform: scale(1.05);
+  color:#83d4c7; /* Change this to the desired active color */
+}
+
+.logout {
+  cursor: pointer;
+  position: relative; /* Ajout pour positionner correctement le texte informatif */
+}
+
+.logoutIcon {
+  font-size: 30px !important;
+  margin-right: 20px;
+}
+
+.logoutIcon:hover {
+  color: #086788;
+}
+/*calendrier style */
+.calendar-container {
+
+  border-radius: 20px; 
+  margin: 7px;
+}
+
+.calendar-content {
+
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  padding: 10px;
+  overflow: hidden; /* Pour s'assurer que le pseudo-élément reste à l'intérieur des bordures */
+}
+
+.calendar-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    35deg,
+    rgba(131, 212, 199, 0.5) 1%,
+    rgba(131, 212, 199, 0.5) 31%,
+    rgba(170, 226, 217, 0.5) 62%,
+    rgba(224, 238, 236, 0.5) 93%
+  );
+  z-index: 1;
+}
+
+.calendar-content .fc {
+  position: relative;
+  z-index: 2;
+}
+
+
+
+.fc-daygrid-event {
+  font-size: 12px; 
+  padding: 2px; 
+  
+  font-weight: 500;
+  margin-bottom: 2px; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.fc-event {
+  background-color: #08688888;
+  color: #000000 !important;
+  border: none; /* Suppression de la bordure */
+  border-radius: 5px; /* Arrondi des coins */
+  padding: 5px; /* Espacement intérieur */
+  margin-bottom: 5px; /* Marge en bas des événements */
+}
+

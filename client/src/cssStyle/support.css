@@ -1,0 +1,34 @@
+.support-container {
+    display: flex;
+
+    
+  }
+  
+  .support-content {
+    
+    flex: 1;
+    padding: 20px;
+    background-color: #83d4c637;
+    border-radius: 8px;
+     margin: 10px;
+  }
+
+  .support-content section {
+    margin-bottom: 40px;
+  }
+  
+  .support-content h2 {
+    margin-bottom: 20px;
+  }
+  
+  .support-image {
+    width: 80%;
+    margin-top: 25px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  

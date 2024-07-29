@@ -1,0 +1,570 @@
+.gestion{
+  min-height: 100vh;
+  height: 100%;
+}
+
+
+.tabIcon{
+    height: auto;
+    width: 24px;
+   
+}
+.backArrow{
+  color: black;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.tabHdr{
+ 
+  color: black;
+  border-radius: 20px 20px 0px 0px;
+  background: linear-gradient(
+    35deg,
+    rgba(131, 212, 198, 0.293) 1%,
+    rgba(131, 212, 198, 0.226) 31%,
+    rgba(170, 226, 217, 0.373) 62%,
+    rgba(224, 238, 236, 0.5) 93%
+  );
+ 
+}
+.tabHdr .nav-link.active {
+  color: black !important;
+  background-color: #f8f9fa; /* Couleur de fond pour l'onglet actif */
+  border-radius: 20px 20px 0px 0px;
+}
+.tabHdr .nav-link.active:hover {
+  color: black !important;
+  /* Couleur de fond pour l'onglet actif */
+  border-radius: 20px 20px 0px 0px;
+}
+.tabHdr .nav-link{
+  color: black !important;
+  font-size: large;
+  font-weight: 600;
+
+}
+.tabHdr .nav-link:hover{
+  color: rgb(255, 255, 255) !important;
+  border-radius: 20px 20px 0px 0px;
+  
+}
+.tabContent {
+  background: linear-gradient(
+    35deg,
+    rgba(131, 212, 198, 0.262) 1%,
+    rgba(131, 212, 198, 0.205) 31%,
+    rgba(170, 226, 217, 0.373) 62%,
+    rgba(224, 238, 236, 0.5) 93%
+  );
+ 
+ min-height: 100vh;
+}
+
+
+/*///////////taches table style/////////////*/
+.dropDownTrie{
+  background-color: transparent;
+  border: none;
+ 
+  text-align: end;
+  margin-top: 0;
+}
+.addBtn{
+  background-color: #a3f7af;
+  border: none;
+  text-align: end;
+  margin-top: 0;
+}
+.addBtn:hover{
+  background-color: #a3f7af;
+ 
+}
+.no-caret::after {
+  display: none !important;
+}
+.refus{
+  background-color: #e3708f;
+  border: none;
+  text-align: end;
+  margin-top: 0;
+}
+.refus:hover{
+  background-color: #e3708f;
+}
+
+.dropDownBtn {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: -10px;
+  right: -3px;
+}
+
+.dropDownBtn:hover,
+.dropDownBtn:active {
+  background-color: transparent;
+  color: #030303;
+  border: none;
+}
+
+.membre {
+  color: #030303;
+  align-items: center;
+  justify-content: center; 
+  text-align: center;
+  padding: 0;
+  margin-top: 0px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.profileContainer {
+  position: relative;
+  display: flex; 
+  align-items: center; 
+}
+
+.imageProfile {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  transition: opacity 0.3s; /* pour un effet de fondu */
+}
+
+.deleteIcon {
+  width: 31px !important;
+  height: 31px !important; 
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.3s; 
+  cursor: pointer;
+  color: #086788;
+  border: 1px solid #086788;
+  border-radius: 50%;
+}
+
+.profileContainer:hover .deleteIcon {
+  opacity: 1; /* devient visible au survol */
+}
+
+
+.drpItem {
+  display: flex;
+  align-items: center;
+  color: #030303;
+  justify-content: center;
+  text-align: center;
+  padding: 0;
+  margin-top: 0px;
+  font-weight: 600;
+  font-size: 13px;
+}
+.dropdown-menu-left {
+  right: auto !important;
+  left: -80% !important; 
+}
+.taskTable{
+  width: 99%;
+ align-items: center;
+ justify-content: center;
+ 
+}
+.selected-member {
+  background: none; 
+  border: none;
+  color: #030303;
+  align-items: center;
+  justify-content: center; 
+  text-align: center;
+  padding: 0;
+  margin-top: 0px;
+  font-weight: 600;
+  font-size: 12px;
+}
+.actionIcon{
+  cursor: pointer;
+}
+.actionIcon:hover{
+color: #83d4c7;
+}
+.updateBtn{
+  border: none;
+}
+.disabledIcon {
+  opacity: 0.5; 
+  cursor: not-allowed;
+}
+.taskCompleted {
+  text-decoration: line-through;
+  color: #999; 
+}
+/*////////demandes//////////////*/
+.demandes-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 8px 0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.demandes-card p {
+  margin: 4px 0;
+}
+
+.btn {
+  margin-right: 8px;
+}
+.imageProfileD{
+  width: 130px;
+  height: auto;
+  border-radius: 50%;
+}
+.imageProfileF{
+  width: 100px;
+  height: auto;
+  border-radius: 50%;
+}
+.nomUser{
+  color: #086788;
+  font-weight: bold;
+}
+/*/////membres//////////*/
+.profile-card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  width: 85%;
+  min-height: 300px;
+  justify-content: center;
+}
+
+.image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  margin-bottom: 10px;
+  background-color: white ;
+ width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  
+}
+
+.image-container img {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.roleTxtCH{
+  font-weight: 500;
+ color: #086788;
+}
+.roleTxtAD{
+  font-weight: 500;
+ color: #a3f7af;
+}
+.titleM{
+  font-size: 15px;
+}
+.descM{
+  font-size: 13px;
+  font-weight: 400;
+}
+.contactM{
+  font-size: 13px;
+}
+.rotate-up {
+  transform: rotate(90deg);
+  color: #83d4c7;
+  cursor: pointer;
+ 
+}
+
+.rotate-down {
+  transform: rotate(-90deg);
+  color: #e3708f;
+  cursor: pointer;
+}
+.searchUser{
+  border: 1px solid #e0e0e0;
+}
+/*//////// gestion de documents///////////////*/
+.typeBtn{
+  background-color: #83d4c68c;
+  border: none;
+  border-radius: 20px;
+  margin-top: 0;
+  min-width: 90px;
+  font-size: 16px;
+  
+}
+.typeBtn:hover{
+  background-color:#83d4c7;
+ 
+}
+.typeBtn:active{
+  background-color:#83d4c7;
+ 
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.header h4 {
+  margin-left: 10px;
+}
+
+.header hr {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.upload-card {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ced4da;
+  cursor: pointer;
+
+}
+
+.upload-card:hover {
+  background-color: #f8f9fa;
+}
+
+.file-card {
+  cursor: pointer;
+  background-color: #ffffff;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #08688842 ;
+}
+
+ .icon {
+  font-size: 60px;
+  color: #282727;
+  z-index: 1;
+}
+
+.file-card .file-name {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+ font-weight: 500;
+}
+
+.file-card .actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+}
+
+.typeBtn {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+.typeBtn:active{
+  color: #fff !important;
+}
+
+.drag-over {
+  border-color: #086788;
+  background-color: #e9f5ff;
+}
+.moreIcon{
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  position: relative;
+  left: 20px;
+  top:-10px;
+}
+.moreIcon:hover{
+  background-color: transparent;
+  color: #a3f7af;
+}
+
+.moreIcon:active{
+  background-color: transparent !important;
+}
+
+.upload-status p {
+  margin: 5px 0; /* Adjust spacing as needed */
+}
+/* DetailFile.css */
+
+.popover-content {
+  padding: 10px;
+  max-width: 300px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.user-image {
+  max-width: 16%;
+  border-radius: 50%;
+ 
+}
+
+.file-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.file-date {
+  margin-bottom: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.detailActionBtn {
+  background-color: #a3f7af;
+  border: none;
+  margin-top: 10px;
+  margin-right: 8px;
+  padding: 7px 12px;
+  border-radius:18px ;
+  font-size: 16px;
+  font-weight: 500;
+}
+.detailActionBtn:hover{
+color: #fff;
+}
+
+.iconDetail:hover{
+  color: #fff ;
+  
+}
+.closeIcon{
+  z-index: 2;
+}
+.progressBar{
+  height: 30px;
+ 
+}
+.statDiv{
+   width: 95%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+ 
+}
+.tacheAtt{
+background-color: #fbe32bba;
+border-color: #d6be0c;
+}
+.tacheCours{
+background-color: #83d4c7;
+}
+.tacheDone{
+background-color: #a3f7af;
+}
+.progresDaysleft{
+  background-color: #83d4c69f;
+  font-size: 14px;
+  color: #030303;
+  font-weight: 500;
+}
+.progresDaysPassed{
+  background-color: #086788;
+  font-size: 14px;
+  font-weight: 500;
+}
+.detail-projet-card {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.resizedBdg{
+  height: 30px;
+  width: 70px;
+  font-size: 18px;
+}
+.myMsg{
+  background-color: #a3f7b098;
+  border-radius: 15px;
+  padding-left: 10px;
+    height: auto;
+ text-align: start;
+ align-items: center;
+ margin-bottom: 3px;
+}
+.iconDiscussion {
+  height: auto;
+  width: 60px;
+}
+.chatDiv{
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1000;
+}
+.chatBdg{
+margin-bottom: 20px;
+}
+
+/* Hide scrollbar */
+.discussionPopover .MuiPopover-paper {
+  border-radius: 20px;
+  overflow: hidden; /* Ensure overflow is hidden */
+}
+
+.discussionPopover .MuiPopover-paper .MuiList-root {
+  overflow: auto; /* Allow for auto-scrolling within popover */
+}
+
+/* Hide scrollbar for modern browsers */
+.discussionPopover .MuiPopover-paper .MuiList-root::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Internet Explorer */
+.discussionPopover .MuiPopover-paper .MuiList-root {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.textFiled{
+  width: 100%;
+  border: 1px solid #83d4c69f;
+  border-radius: 20px;
+  padding-left: 10px;
+  height: 40px;
+  box-shadow: 0 4px 8px #a8f2e49b;
+}
+.textFiled:focus{
+ 
+  border: 1px solid #83d4c69f !important;
+
+  box-shadow: 0 4px 8px #a8f2e49b !important;
+}

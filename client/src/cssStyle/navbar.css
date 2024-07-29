@@ -1,0 +1,51 @@
+/* Override Bootstrap's default Navbar padding */
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  /* Adjust the height and alignment of the logo */
+  .logo {
+    margin-left: 20px;
+    height: 60px;
+    width: 205px;
+    padding: 0;
+  }
+  
+  /* Adjust the link styles to reduce vertical space */
+  .linkNav {
+    font-size: large;
+    font-family: "Roboto", sans-serif;
+    margin-right: 20px;
+    color: black;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 60px; 
+   text-decoration: none;
+
+  }
+  
+  .linkNav:hover {
+    color: #086788;
+  }
+  .login{
+    font-weight: 600;
+    font-size: large;
+    font-family: "Roboto", sans-serif;
+    margin-right: 20px;
+    color: rgb(14, 14, 14);
+    height: 40px; 
+    background-color: #83d4c6a7;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease; 
+    max-width: 101px;
+    text-decoration: none;
+   
+    
+  }
+  .login:hover{  
+   color: rgb(255, 255, 255);
+   
+  }
+  

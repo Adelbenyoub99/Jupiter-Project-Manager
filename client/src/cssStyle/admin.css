@@ -1,0 +1,32 @@
+.notActive{
+  color: red;
+}
+.active{
+    color: green;
+}
+.reinitialBtn{
+    border: none;
+    margin: 0;
+    background-color: #83d4c7;
+}
+.desactive{
+    border: none;
+    margin: 0;
+    background-color: #e3708f; 
+}
+.desactive:hover{
+    background-color: #e3708f; 
+}
+.mainDiv{
+    background-color: #83d4c690;
+    align-self: center;
+    width:90%;
+    margin: 0 auto;
+    margin-top: 10px;
+    border-radius: 50px;
+
+}
+.custom-progress {
+    color: #086788; 
+    background-color: white; 
+  }

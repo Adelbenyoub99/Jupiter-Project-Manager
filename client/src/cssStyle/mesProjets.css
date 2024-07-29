@@ -1,0 +1,45 @@
+.project-column {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+ 
+  border: 10px solid #dee2e6;
+  border-radius: 30px;
+}
+.bgChef{
+  
+background-color: #83d4c66f;
+}
+.bgAdjoint{
+  background-color: #a3f7b069;
+
+}
+.bgColab{
+background-color: #0868882b;
+}
+.custom-badge {
+  background-color: #086788;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.cardP {
+  width: 100% !important;
+  border: 1px solid #dee2e6;
+  transition: transform 0.2s ease-in-out;
+}
+
+.cardP:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+h4 {
+  display: flex;
+  align-items: center;
+}
+
+h4 svg {
+  margin-left: 0.5rem;
+}

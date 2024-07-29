@@ -1,0 +1,64 @@
+.footer_bg{
+    background-color: #bcbcbce7;
+   
+}
+.footerleft{
+  margin-left: 50px;
+  height: 130px;
+  width: 133px;
+  transform: rotate(-20deg) ;
+}
+.leftside{
+ 
+  overflow: hidden;
+  padding-left: 60px;
+}
+.F_ttr{
+    font-size: large;
+    font-family: "Allerta Stencil", sans-serif; 
+    display: inline-block;
+  position: relative;
+    padding-top: 10px; 
+}
+.F_ttr::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%; 
+    height: 4px; 
+    background-color: #83d4c7; 
+  }
+.F_text{
+    font-size: small;
+    font-family: "Allerta Stencil", sans-serif;
+    padding-top: 5px;   
+    
+}
+.social-icon {
+  margin: 0 10px; /* Espace entre les icônes */
+  text-decoration: none; /* Supprime le soulignement */
+  display: flex; /* Assure que les images s'alignent correctement */
+}
+
+.social-icon-img {
+  width: 22px; /* Ajustez la taille selon vos besoins */
+  height: auto; /* Maintient les proportions de l'image */
+  transition: transform 0.3s ease; /* Transition douce pour l'effet de survol */
+}
+
+.social-icon-img:hover {
+  transform: scale(1.1); /* Légère augmentation de la taille au survol */
+}
+.contact-info {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: small;
+  font-weight: 600;
+}
+
+.contact-icon {
+  width: 20px; /* Ajustez la taille selon vos besoins */
+  height: auto; /* Maintient les proportions de l'image */
+  margin-right: 10px;
+}

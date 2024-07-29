@@ -1,0 +1,75 @@
+.notif-container {
+    background-color: #83d4c690;
+    
+    
+    border-radius: 20px;
+    max-height: 90vh;
+    overflow: auto; /* Affiche le défilement */
+    scrollbar-width: none; /* Masque la barre de défilement */
+    -ms-overflow-style: none;
+}
+.notif-container::-webkit-scrollbar {
+    display: none;
+}
+.div1 {
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    
+    overflow: auto; /* Affiche le défilement */
+    scrollbar-width: none; /* Masque la barre de défilement */
+    -ms-overflow-style: none;
+}
+.alert{
+    width: 80%;
+}
+.notif-header {
+    position: sticky;
+    top: 0;
+   width: 100%;
+    z-index: 10;
+    padding: 10px;
+   
+    
+}
+
+.notif-list {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    overflow: auto; /* Affiche le défilement */
+    scrollbar-width: none; /* Masque la barre de défilement */
+    -ms-overflow-style: none;
+   
+}
+
+.notif-row {
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.3s ease-out;
+   
+    width: 96.1%;
+}
+
+.notif-row:hover {
+    transform: scale(1.04);
+}
+
+.notif-txt {
+    font-weight: 400;
+}
+
+.cleanIcon {
+    cursor: pointer;
+    transform: scale(1.02);
+}
+
+.notif-row.swipe-out {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
