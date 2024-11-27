@@ -26,7 +26,7 @@ export default function Footer() {
           <Nav.Link href="#link" className='linkNav'>Projets</Nav.Link>
           <Nav.Link href="#about" className='linkNav'>Support</Nav.Link>
       </div>
-        <p className='mt-4 pt-2'>&copy; {new Date().getFullYear()} JUPITER Project Manager</p>
+        <p className='mt-4 pt-2'>&copy; {new Date().getFullYear()} BERKATI FARAH & BENYOUB Adel </p>
       </div> 
     </div>
     <div className="col-md-4 d-flex align-items-center justify-content-between leftside">
@@ -37,7 +37,7 @@ export default function Footer() {
       </div>
       <div className='contact-info d-flex align-items-center'>
         <img src={call} alt="Phone" className="contact-icon" />
-        <span className='ml-2'>+213 (0) 562 01 14 62</span>
+        <span className='ml-2'>+213 (0) 123 123 123</span>
       </div>
       <div className='d-flex align-items-center justify-content-between mt-3'>
         <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
