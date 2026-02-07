@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
+const logger = require('../utils/logger');
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'jupiter_db',
@@ -18,11 +19,11 @@ const sequelize = new Sequelize(
 // Test de la connexion à la base de données
 (async () => {
   try {
-    console.log('Tentative de connexion à la base de données...');
+    logger.info('Tentative de connexion à la base de données...');
     await sequelize.authenticate();
-    console.log('Connexion à la base de données réussie.');
+    logger.info('Connexion à la base de données réussie.');
   } catch (error) {
-    console.error('Impossible de se connecter à la base de données:', error);
+    logger.error('Impossible de se connecter à la base de données', { error: error.message });
     process.exit(1); // Arrêter l'application si la connexion échoue
   }
 })();

@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const logger = require('./utils/logger');
 const app = express();
 const port = process.env.PORT || 5000;
 const helmet = require('helmet');
@@ -22,14 +23,14 @@ const io = require('socket.io')(server, {
 module.exports.io = io;
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  logger.info('Socket.io: User connected', { socketId: socket.id });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    logger.info('Socket.io: User disconnected', { socketId: socket.id });
   });
 
   socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
+    logger.debug('Socket.io: Message received', { message: msg });
     io.emit('chat message', msg); // Broadcast message to all clients
   });
  
@@ -86,7 +87,7 @@ const dossierRoutes = require('./routes/dossierRoutes');
 const fichierRoutes = require('./routes/fichierRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
-const participerRoutes = require('./routes/ParticiperRoutes');
+const participerRoutes = require('./routes/participerRoutes');
 const projetRoutes = require('./routes/projetRoutes');
 const signalRoutes = require('./routes/signalRoutes');
 const tacheRoutes = require('./routes/tacheRoutes');
@@ -116,5 +117,5 @@ app.use('/uploadsIMG', express.static(path.join(__dirname, 'uploadsIMG')));
 
 // Écoute du serveur sur le port défini
 server.listen(port, () => {
-    console.log(`Server is listening at port :${port}`);
+    logger.info(`Server is listening at port :${port}`);
 });
