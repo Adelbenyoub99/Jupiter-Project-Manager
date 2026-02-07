@@ -11,7 +11,7 @@ const httpRequest = async (route, method, data, headers) => {
     options.body = JSON.stringify(data);
   }
 
-  const url = 'http://localhost:5000' + route;
+  const url = (process.env.REACT_APP_API_URL || 'http://localhost:5000') + route;
 
   try {
     const response = await fetch(url, options);

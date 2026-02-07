@@ -1,15 +1,21 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
-const sequelize = new Sequelize('jupiter_db', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql', 
-  define: {
-    timestamps: true // Si vous ne souhaitez pas que Sequelize gère les champs createdAt et updatedAt
+const sequelize = new Sequelize(
+  process.env.DB_NAME || 'jupiter_db',
+  process.env.DB_USER || 'root',
+  process.env.DB_PASSWORD || '',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    define: {
+      timestamps: true
+    }
   }
-});
+);
 
 // Test de la connexion à la base de données
-
 (async () => {
   try {
     console.log('Tentative de connexion à la base de données...');
@@ -17,6 +23,7 @@ const sequelize = new Sequelize('jupiter_db', 'root', '', {
     console.log('Connexion à la base de données réussie.');
   } catch (error) {
     console.error('Impossible de se connecter à la base de données:', error);
+    process.exit(1); // Arrêter l'application si la connexion échoue
   }
 })();
 

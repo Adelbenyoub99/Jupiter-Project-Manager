@@ -1,6 +1,7 @@
 const express = require('express');
+require('dotenv').config();
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 const helmet = require('helmet');
 const cors = require('cors');
 const multer = require('multer');
@@ -11,7 +12,9 @@ const bodyParser = require('body-parser');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
   cors: {
-    origin: '*',
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST']
   }
 });
 
@@ -44,7 +47,7 @@ cloudinary.config(cloudinaryConfig);
 app.use(express.json());
 app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5000','ws://localhost:5000'], 
+  origin: [process.env.CLIENT_URL || 'http://localhost:3000', 'http://localhost:5000','ws://localhost:5000'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'], 
     allowedHeaders: ['Content-Type', 'Authorization'], 
   }));
@@ -60,10 +63,19 @@ const storage = multer.diskStorage({
     cb(null, uploadDirectory);
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    // Générer un nom unique pour éviter les collisions
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    const nameWithoutExt = path.basename(file.originalname, ext);
+    cb(null, nameWithoutExt + '-' + uniqueSuffix + ext);
   }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // Limite de 10MB
+  }
+});
 
 // Import des routes
 const adminRoutes = require('./routes/adminRoutes');
