@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../Controllers/userController');
-//const upload = require('../middlewares/multerMiddleware');
 const verifyToken = require('../middlewares/verifyToken');
 const verifyChefAndAdjoint = require('../middlewares/verifyChefAndAdjoint');
 const verifyAdmin = require('../middlewares/verifyAdmin');
 const verifyChef = require('../middlewares/verifyChef');
-const uploadIMG =require('../middlewares/multerForIMG')
-// Route de login  v
-router.post('/login', userController.login);
+const uploadIMG = require('../middlewares/multerForIMG');
+const { validateLogin, validateRegister, validateUserSearch, validateUserUpdate } = require('../validators/userValidator');
+// Route de login avec validation
+router.post('/login', validateLogin, userController.login);
 
-// Créer un nouvel utilisateur  v
-router.post('/register', userController.createUser);
+// Créer un nouvel utilisateur avec validation
+router.post('/register', validateRegister, userController.createUser);
 
 // Obtenir tous les utilisateurs (accessible uniquement aux administrateurs)  v
 //router.get('/', verifyAdmin, userController.getAllUsers);
@@ -28,15 +28,14 @@ router.get('/:id/chefprojet', verifyToken, userController.getProjectUserChef);
 // Get all projects where user is Adjoint
 router.get('/:id/adjoint', verifyToken, userController.getProjectUserAdjoint);
 
-// Update user by ID
-
-router.put('/', verifyToken, userController.updateUserById);
+// Update user by ID avec validation
+router.put('/', verifyToken, validateUserUpdate, userController.updateUserById);
 router.put('/img', verifyToken, uploadIMG.single('image'), userController.updateUserIMGById);
 
 // Delete user by ID
 router.delete('/', verifyToken, userController.deleteUserById);
-/// recherche utilisateur ///////////////// 
-router.get('/searchUser',verifyToken,userController.searchUsers)
+// Recherche utilisateur avec validation
+router.get('/searchUser', verifyToken, validateUserSearch, userController.searchUsers);
 
 router.post('/resetPSW',userController.forgotPasswordMailSender)
 router.put('/updatePSW',userController.resetPassword)

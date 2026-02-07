@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const projetController = require('../Controllers/projetController');
 const cloudinaryController = require('../Controllers/fichiersController');
+const { validateCreateProject, validateUpdateProject, validateProjectId } = require('../validators/projetValidator');
 // Get all public projects
 router.get('/publics', projetController.getPublicProjects)
 
@@ -25,8 +26,8 @@ router.get('/userPublicProject',verifyToken,projetController.getUserPublicProjec
 
 router.get('/userProject',verifyToken,projetController.getUserProject)
 
-// Créer un nouveau projet
-router.post('/', verifyToken, projetController.createProject);
+// Créer un nouveau projet avec validation
+router.post('/', verifyToken, validateCreateProject, projetController.createProject);
 
 // Get all projets
 //router.get('/', verifyAdmin, projetController.getAllProjets);
@@ -42,8 +43,8 @@ router.get('/:idProjet/url', verifyToken, projetController.getProjectUrl);
 router.get('/:projectId/members', projetController.getProjectMembers);
 
 const verifyChef = require('../middlewares/verifyChef');
-// Update projet by ID 
-router.put('/:idProjet', verifyToken, verifyChef, projetController.updateProjetById);
+// Update projet by ID avec validation
+router.put('/:idProjet', verifyToken, verifyChef, validateUpdateProject, projetController.updateProjetById);
 
 // Delete projet by ID 
 router.delete('/:idProjet', verifyToken, verifyChef, projetController.deleteProjetById);
