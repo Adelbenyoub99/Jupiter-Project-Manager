@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const adminController = require('../Controllers/adminController');
+const adminController = require('../controllers/adminController');
 const verifyAdmin = require('../middlewares/verifyAdmin');
-const userController= require('../Controllers/userController')
-const projetController=require('../Controllers/projetController')
-const signalController= require('../Controllers/signalController')
-const participerController= require('../Controllers/participerController')
+const userController= require('../controllers/userController')
+const projetController=require('../controllers/projetController')
+const signalController= require('../controllers/signalController')
+const participerController= require('../controllers/participerController')
 const adminActivityLogger=require('../middlewares/adminActivityLogger')
 // Route de login pour Admin
 router.post('/login', adminController.loginAdmin);

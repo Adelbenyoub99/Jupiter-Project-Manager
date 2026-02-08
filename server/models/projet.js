@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./1user');
+const User = require('./user');
 const Messages = require('./message');
 const Tache = require('./tache');
 const Fichier=require('./fichier')
@@ -58,13 +58,13 @@ const Projet = sequelize.define('Projet', {
 });
 /////Associations/////////////////
 //////////un projet a plusieurs messages //////////
-Projet.hasMany(Messages,{foreignKey:'idProjet'})
+Projet.hasMany(Messages,{foreignKey:'idProjet', onDelete: 'CASCADE', hooks: true})
 Messages.belongsTo(Projet,{foreignKey:'idProjet'})
 ///////////un projet a plusieur taches ////////////
-Projet.hasMany(Tache,{foreignKey :'idProjet'})
+Projet.hasMany(Tache,{foreignKey :'idProjet', onDelete: 'CASCADE', hooks: true})
 Tache.belongsTo(Projet,{foreignKey :'idProjet'})
 /////////////un projet a pluisieurs fichiers/////////
-Projet.hasMany(Fichier,{foreignKey:'idProjet'})
+Projet.hasMany(Fichier,{foreignKey:'idProjet', onDelete: 'CASCADE', hooks: true})
 Fichier.belongsTo(Projet,{foreignKey :'idProjet'})
 
 module.exports = Projet;

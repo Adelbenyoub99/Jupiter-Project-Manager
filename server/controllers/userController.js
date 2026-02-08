@@ -8,7 +8,10 @@ const logger = require("../utils/logger");
 const uploadIMG = require("../middlewares/multerForIMG");
 const { Op } = require('sequelize');
 const nodemailer = require('nodemailer');
-const adminActivityLogger=require('../middlewares/adminActivityLogger')
+const adminActivityLogger=require('../middlewares/adminActivityLogger');
+const minioClient = require('../utils/minioClient');
+const fs = require('fs');
+const path = require('path');
 dotenv.config();
 
 const secretKey = process.env.JWT_SECRET_KEY;
@@ -48,7 +51,7 @@ exports.createUser = async (req, res) => {
     }
     res.status(201).json({ user, token });
   } catch (error) {
-    console.error("Error creating user:", error);
+    logger.error("Error creating user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -83,9 +86,18 @@ exports.login = async (req, res) => {
       secretKey,
       { expiresIn: "24h" }
     );
-    res.status(200).json({ user, token });
+    
+    // Generate presigned URL for the user image if it's not the default icon
+    const userJson = user.toJSON();
+    if (user.image && user.image !== "JupiterIcon.png" && user.image !== "anonymeUser.png") {
+        userJson.imageUrl = await minioClient.getFileUrl(user.image);
+    } else {
+        userJson.imageUrl = user.getImageUrl();
+    }
+
+    res.status(200).json({ user: userJson, token });
   } catch (error) {
-    console.error("Error during login:", error);
+    logger.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -96,7 +108,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await User.findAll();
     res.status(200).json(users);
   } catch (error) {
-    console.error("Error getting users:", error);
+    logger.error("Error getting users:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -107,9 +119,9 @@ exports.searchUsers=async(req,res)=>{
     const users = await User.findAll({
         where: {
             [Op.or]: [
-                { nom: { [Op.like]: `%${term}%` } },
-                { prenom: { [Op.like]: `%${term}%` } },
-                { nomUtilisateur: { [Op.like]: `%${term}%` } }
+                { nom: { [Op.iLike]: `%${term}%` } },
+                { prenom: { [Op.iLike]: `%${term}%` } },
+                { nomUtilisateur: { [Op.iLike]: `%${term}%` } }
             ]
         },
         attributes: ['idUtilisateur', 'nomUtilisateur', 'email', 'nom', 'prenom', 'numTel', 'descProfile', 'image']
@@ -118,7 +130,7 @@ exports.searchUsers=async(req,res)=>{
     // Répond avec les utilisateurs trouvés
     return res.status(200).json(users);
 } catch (error) {
-    console.error('Error searching users:', error);
+    logger.error('Error searching users:', error);
     return res.status(500).json({ message: 'Internal server error' });
 }
 }
@@ -133,13 +145,17 @@ exports.getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    const userWithImageUrl = {
-      ...user.toJSON(),
-      imageUrl: user.getImageUrl(),
-    };
-    res.status(200).json(userWithImageUrl);
+    
+    const userJson = user.toJSON();
+    if (user.image && user.image !== "JupiterIcon.png" && user.image !== "anonymeUser.png") {
+        userJson.imageUrl = await minioClient.getFileUrl(user.image);
+    } else {
+        userJson.imageUrl = user.getImageUrl();
+    }
+
+    res.status(200).json(userJson);
   } catch (error) {
-    console.error("Error getting user by ID:", error);
+    logger.error("Error getting user by ID:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -163,7 +179,7 @@ exports.getProjectUserColab = async (req, res) => {
     }
     res.status(200).json(participations);
   } catch (error) {
-    console.error(
+    logger.error(
       "Error getting projects for user with role Collaborateur:",
       error
     );
@@ -189,7 +205,7 @@ exports.getProjectUserChef = async (req, res) => {
 
     res.status(200).json(projetsChef);
   } catch (error) {
-    console.error("Error getting projects for user as ChefProjet:", error);
+    logger.error("Error getting projects for user as ChefProjet:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -211,7 +227,7 @@ exports.getProjectUserAdjoint = async (req, res) => {
     }
     res.status(200).json(projetsAdjoint);
   } catch (error) {
-    console.error("Error getting projects where user is Adjoint:", error);
+    logger.error("Error getting projects where user is Adjoint:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -219,8 +235,8 @@ exports.getProjectUserAdjoint = async (req, res) => {
 // Update user by ID oui
 exports.updateUserById = async (req, res) => {
     const idUtilisateur = req.user.userId;
-    console.log("id user : " + idUtilisateur);
-    console.log(req.body.nom);
+    logger.info("id user : " + idUtilisateur);
+    logger.info(req.body.nom);
   
     try {
       if (req.body.motDePasse) {
@@ -234,34 +250,38 @@ exports.updateUserById = async (req, res) => {
   
       if (affectedRows > 0) {
         const updatedUser = await User.findByPk(idUtilisateur);
-        const userWithImageUrl = {
-          ...updatedUser.toJSON(),
-          imageUrl: updatedUser.getImageUrl()
-        };
-        return res.status(200).json(userWithImageUrl);
+        const userJson = updatedUser.toJSON();
+        
+        if (updatedUser.image && updatedUser.image !== "JupiterIcon.png" && updatedUser.image !== "anonymeUser.png") {
+            userJson.imageUrl = await minioClient.getFileUrl(updatedUser.image);
+        } else {
+            userJson.imageUrl = updatedUser.getImageUrl();
+        }
+        
+        return res.status(200).json(userJson);
       } else {
         return res.status(404).json({ message: "User not found" });
       }
     } catch (error) {
-      console.error("Error updating user by ID:", error);
+      logger.error("Error updating user by ID:", error);
       return res.status(500).json({ message: "Internal server error" });
     }
   };
   
   exports.updateUserIMGById = async (req, res) => {
     const idUtilisateur = req.user.userId;
-    console.log("id user : " + idUtilisateur);
+    logger.info("id user : " + idUtilisateur);
   
     try {
       let image;
       if (req.file) {
         
         image = req.file.filename;
-        console.log('test 1 '+image)
+        logger.info('test 1 '+image)
       } else {
         image = req.body.image;
 
-        console.log('test 2 '+image)
+        logger.info('test 2 '+image)
       }
   
       const [affectedRows] = await User.update(
@@ -269,17 +289,34 @@ exports.updateUserById = async (req, res) => {
         { where: { idUtilisateur: idUtilisateur } }
       );
       if (affectedRows > 0) {
+        // Supprimer le fichier temporaire si uploadé
+        if (req.file) {
+            const tempFilePath = path.join(__dirname, '..', 'uploadsIMG', req.file.filename);
+            const fileBuffer = fs.readFileSync(tempFilePath);
+            const key = await minioClient.uploadFile(fileBuffer, req.file.originalname, req.file.mimetype);
+            
+            // Mettre à jour avec la clé MinIO
+            await User.update({ image: key }, { where: { idUtilisateur } });
+            fs.unlinkSync(tempFilePath);
+            
+            image = key;
+        }
+
         const updatedUser = await User.findByPk(idUtilisateur);
-        const userWithImageUrl = {
-          ...updatedUser.toJSON(),
-          imageUrl: updatedUser.getImageUrl()
-        };
-        return res.status(200).json(userWithImageUrl);
+        const userJson = updatedUser.toJSON();
+        
+        if (image && image !== "JupiterIcon.png" && image !== "anonymeUser.png") {
+            userJson.imageUrl = await minioClient.getFileUrl(image);
+        } else {
+            userJson.imageUrl = updatedUser.getImageUrl();
+        }
+
+        return res.status(200).json(userJson);
       } else {
         return res.status(404).json({ message: "User not found" });
       }
     } catch (error) {
-      console.error("Error updating user image by ID:", error);
+      logger.error("Error updating user image by ID:", error);
       return res.status(500).json({ message: "Internal server error" });
     }
   };
@@ -356,14 +393,14 @@ exports.deleteUserById = async (req, res) => {
 
     return res.status(200).json({message: "acount deleted"});
   } catch (error) {
-    console.error("Error deleting user by ID:", error);
+    logger.error("Error deleting user by ID:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 /////// admin service/////////////////
 exports.updateUserPSW = async (req, res) => {
   const {idUser} = req.params;
-  console.log("id user : " + idUser);
+  logger.info("id user : " + idUser);
   
 
   try {
@@ -380,20 +417,24 @@ exports.updateUserPSW = async (req, res) => {
 
 
       const updatedUser = await User.findByPk(idUser);
-      const userWithImageUrl = {
-        ...updatedUser.toJSON(),
-        imageUrl: updatedUser.getImageUrl()
-      };
-   const action = 'Réinitialisation d\'un mot de passe ';
-   const descActivity = `Le mot de passe de compte utilisateur ${updatedUser.nomUtilisateur} est réinitialié(JPM) `;
-   const idAdmin = req.adminId;
-   await adminActivityLogger(action, descActivity, idAdmin);
-      return res.status(200).json(userWithImageUrl);
+      const userJson = updatedUser.toJSON();
+
+      if (updatedUser.image && updatedUser.image !== "JupiterIcon.png" && updatedUser.image !== "anonymeUser.png") {
+          userJson.imageUrl = await minioClient.getFileUrl(updatedUser.image);
+      } else {
+          userJson.imageUrl = updatedUser.getImageUrl();
+      }
+
+      const action = 'Réinitialisation d\'un mot de passe ';
+      const descActivity = `Le mot de passe de compte utilisateur ${updatedUser.nomUtilisateur} est réinitialié(JPM) `;
+      const idAdmin = req.adminId;
+      await adminActivityLogger(action, descActivity, idAdmin);
+      return res.status(200).json(userJson);
     } else {
       return res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    console.error("Error updating user by ID:", error);
+    logger.error("Error updating user by ID:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -421,7 +462,7 @@ exports.inactiveUser = async (req, res) => {
 
     return res.status(200).json({message: "account disActivated"});
   } catch (error) {
-    console.error("Error deleting user by ID:", error);
+    logger.error("Error deleting user by ID:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -446,7 +487,7 @@ exports.activateUser = async (req, res) => {
  await adminActivityLogger(action, descActivity, idAdmin);
     return res.status(200).json({message: "account Activated"});
   } catch (error) {
-    console.error("Error deleting user by ID:", error);
+    logger.error("Error deleting user by ID:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -483,15 +524,15 @@ exports.forgotPasswordMailSender = async (req, res) => {
     // Envoyer l'email
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error('Erreur lors de l\'envoi de l\'email de réinitialisation:', error);
+        logger.error('Erreur lors de l\'envoi de l\'email de réinitialisation:', error);
         return res.status(500).json({ message: 'Erreur interne du serveur lors de l\'envoi de l\'email.' });
       } else {
-        console.log('Email de réinitialisation envoyé:', info.response);
+        logger.info('Email de réinitialisation envoyé:', info.response);
         return res.status(200).json({ message: 'Email de réinitialisation envoyé avec succès.' });
       }
     });
   } catch (error) {
-    console.error('Erreur lors de la réinitialisation de mot de passe:', error);
+    logger.error('Erreur lors de la réinitialisation de mot de passe:', error);
     res.status(500).json({ message: 'Erreur interne du serveur lors de la réinitialisation de mot de passe.' });
   }
 };
@@ -524,7 +565,7 @@ exports.resetPassword = async (req, res) => {
       return res.status(500).json({ message: 'Erreur lors de la mise à jour du mot de passe.' });
     }
   } catch (error) {
-    console.error('Erreur lors de la réinitialisation du mot de passe :', error);
+    logger.error('Erreur lors de la réinitialisation du mot de passe :', error);
     return res.status(500).json({ message: 'Erreur interne du serveur lors de la réinitialisation du mot de passe.' });
   }
 }

@@ -1,0 +1,10 @@
+﻿
+> client@0.1.0 build
+> react-scripts build
+
+Creating an optimized production build...
+Failed to compile.
+
+Module not found: Error: Can't resolve 'react-icons/fa' in 'G:\Etudes\Master Genie Logiciel\M2 GL\PFE\JUPITERProjectManager\client\src\components'
+
+

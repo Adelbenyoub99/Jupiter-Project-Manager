@@ -1,7 +1,7 @@
 const { and } = require('sequelize');
 const { Assigner , Tache,User,Projet,Notification} = require('../models');
 const moment = require('moment');
-const notificationControlller=require('./notificationController')
+const notificationController=require('./notificationController')
 // Create a new assignation
 exports.createAssignation = async (req, res) => {
     try {
@@ -51,7 +51,7 @@ exports.createAssignation = async (req, res) => {
           idUtilisateur: idUtilisateur , 
          idProjet : updatedTache.idProjet
          };
-          await notificationControlller.createNotif(notificationData)
+          await notificationController.createNotif(notificationData)
         res.status(201).json(updatedTache); // Return the updated task
     } catch (error) {
         console.error('Error creating assignation:', error);
@@ -152,7 +152,7 @@ exports.deleteAssignationById = async (req, res) => {
          idUtilisateur: idUtilisateur , 
         idProjet : updatedTache.idProjet
         };
-         await notificationControlller.createNotif(notificationData)
+         await notificationController.createNotif(notificationData)
         return res.status(200).json(updatedTache); 
     } catch (error) {
         console.error('Error deleting assignation by ID:', error);

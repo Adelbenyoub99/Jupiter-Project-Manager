@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const { Projet } = require('./projet');
-const { User } = require('./1user');
+const { User } = require('./user');
 
 const DemandeAdhesion = sequelize.define('DemandeAdhesion', {
   idDemande: {
@@ -18,7 +18,8 @@ const DemandeAdhesion = sequelize.define('DemandeAdhesion', {
     references: {
       model: User,
       key: 'idUtilisateur'
-    }
+    },
+    onDelete: 'CASCADE'
   },
   idProjet: {
     type: DataTypes.INTEGER,
@@ -27,7 +28,8 @@ const DemandeAdhesion = sequelize.define('DemandeAdhesion', {
     references: {
       model: Projet,
       key: 'idProjet'
-    }
+    },
+    onDelete: 'CASCADE'
   },
   etatDemande: {
     type: DataTypes.ENUM('En cours','Acceptée', 'Refusée','Annulée'),

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const tacheController = require('../Controllers/tacheController');
+const tacheController = require('../controllers/tacheController');
 const verifyToken = require('../middlewares/verifyToken');
 const verifyChefAndAdjoint = require('../middlewares/verifyChefAndAdjoint');
 const verifyAdmin = require('../middlewares/verifyAdmin');

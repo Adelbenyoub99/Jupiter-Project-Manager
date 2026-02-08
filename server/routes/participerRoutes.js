@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const participerController = require('../Controllers/participerController');
+const participerController = require('../controllers/participerController');
 const verifyToken = require('../middlewares/verifyToken');
 const verifyChefAndAdjoint = require('../middlewares/verifyChefAndAdjoint');
 const verifyAdmin = require('../middlewares/verifyAdmin');

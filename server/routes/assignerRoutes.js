@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const assignerController = require('../Controllers/assignerController');
+const assignerController = require('../controllers/assignerController');
 const verifyToken = require('../middlewares/verifyToken');
 const verifyChefAndAdjoint = require('../middlewares/verifyChefAndAdjoint');
 const verifyAdmin = require('../middlewares/verifyAdmin');

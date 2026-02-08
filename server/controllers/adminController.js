@@ -38,7 +38,7 @@ exports.createAdmin = async (req, res) => {
 
     res.status(201).json({ newAdmin, token });
     } catch (error) {
-        console.error('Error creating admin:', error);
+        logger.error('Error creating admin:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -61,7 +61,7 @@ exports.loginAdmin = async (req, res) => {
         const token = jwt.sign({ adminId: admin.idAdmin, role: 'admin' }, secretKey, { expiresIn: '24h' });
         res.status(200).json({ admin, token });
     } catch (error) {
-        console.error('Error during admin login:', error);
+        logger.error('Error during admin login:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -72,7 +72,7 @@ exports.getAllAdmins = async (req, res) => {
         const admins = await Admin.findAll();
         res.status(200).json(admins);
     } catch (error) {
-        console.error('Error getting admins:', error);
+        logger.error('Error getting admins:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -88,7 +88,7 @@ exports.getAllAdminActivities=async(req,res)=>{
         res.status(200).json(activities);
         
     } catch (error) {
-        console.error('Error during admin activity:', error);
+        logger.error('Error during admin activity:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -102,7 +102,7 @@ exports.getAdminById = async (req, res) => {
         }
         res.status(200).json(admin);
     } catch (error) {
-        console.error('Error getting admin by ID:', error);
+        logger.error('Error getting admin by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -123,7 +123,7 @@ exports.updateAdminById = async (req, res) => {
         }
         throw new Error('Admin not found');
     } catch (error) {
-        console.error('Error updating admin by ID:', error);
+        logger.error('Error updating admin by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -150,7 +150,7 @@ exports.deleteAdminById = async (req, res) => {
         }
         throw new Error('Admin not found');
     } catch (error) {
-        console.error('Error deleting admin by ID:', error);
+        logger.error('Error deleting admin by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -171,7 +171,7 @@ exports.isSuperAdmin = async (req, res) => {
             return res.status(200).json({ success: true, isSuperAdmin: false });
         }
     } catch (error) {
-        console.error('Error verifying super admin:', error);
+        logger.error('Error verifying super admin:', error);
         return res.status(500).json({ success: false, message: 'Server error' });
     }
 };

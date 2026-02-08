@@ -27,6 +27,24 @@ exports.createNotif = async (notificationData) => {
     } catch (error) {
         throw new Error(error.message);
     }
+};// Crée plusieurs notifications en une seule opération
+exports.bulkCreateNotif = async (notificationsData) => {
+    try {
+        // Optionnel: On pourrait vérifier l'existence des utilisateurs ici en une seule requête si nécessaire
+        // Mais pour la performance pure, on suppose que les IDs sont valides (provenant de la base)
+        
+        const notifications = await Notification.bulkCreate(notificationsData);
+      
+        // Émettre chaque notification via Socket.io (ou émettre un événement de masse si le front le supporte)
+        notifications.forEach(notification => {
+            io.emit('notification', notification);
+        });
+     
+        return notifications;
+    } catch (error) {
+        logger.error('Error in bulkCreateNotif:', error);
+        throw new Error(error.message);
+    }
 };
 
 // Récupère toutes les notifications par identifiant utilisateur

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const projetController = require('../Controllers/projetController');
-const cloudinaryController = require('../Controllers/fichiersController');
+const projetController = require('../controllers/projetController');
+const cloudinaryController = require('../controllers/fichiersController');
 const { validateCreateProject, validateUpdateProject, validateProjectId } = require('../validators/projetValidator');
 // Get all public projects
 router.get('/publics', projetController.getPublicProjects)

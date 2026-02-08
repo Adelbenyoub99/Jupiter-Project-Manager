@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
+    "username": "postgres",
+    "password": "postgres",
     "database": "jupiter_db",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "host": "db",
+    "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": null,
+    "username": "postgres",
+    "password": "postgres",
     "database": "jupiter_db",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "host": "db",
+    "dialect": "postgres"
   },
   "production": {
-    "username": "root",
-    "password": null,
+    "username": "postgres",
+    "password": "postgres",
     "database": "jupiter_db",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "host": "db",
+    "dialect": "postgres"
   }
 }

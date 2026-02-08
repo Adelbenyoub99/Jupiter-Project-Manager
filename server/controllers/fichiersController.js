@@ -1,8 +1,8 @@
-const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const path = require('path');
 const { Projet,Fichier,User,Participation } = require('../models');
-const notificationController=require('./notificationController')
+const notificationController=require('./notificationController');
+const minioClient = require('../utils/minioClient');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize'); 
 const subfolders = {
@@ -75,45 +75,53 @@ async function uploadFile(req, res) {
     };
 
     const tempFilePath = path.join(__dirname, '..', 'uploads', file.filename);
-
-    const result  = await cloudinary.uploader.upload(tempFilePath, options);
+    const fileBuffer = fs.readFileSync(tempFilePath);
+    
+    // Upload version MinIO
+    const publicId = await minioClient.uploadFile(fileBuffer, file.originalname, file.mimetype);
     fs.unlinkSync(tempFilePath);
+
+    const url = await minioClient.getFileUrl(publicId);
 
     const fichier = await Fichier.create({
       idProjet,
       idUtilisateur,
       nomFichier: req.file.originalname,
-      publicId: result.public_id,
-      url: result.secure_url,
+      publicId: publicId, // Dans MinIO, c'est l'Object Key
+      url: url, // URL signée temporaire
       Type: getResourceTypeToStore(fileExtension),
-      folder: result.folder
+      folder: projectFolderName + '/' + targetSubfolder
     });
+    
     const createdFile = await Fichier.findByPk(fichier.idFichier, {
       include: { model: User, attributes: ['nomUtilisateur', 'nom', 'prenom', 'image'] }
     });
 
-    //  creation d'une notification
+    // creation de notifications en masse
     const membres = await Participation.findAll({
-      where: { idProjet } });
-      const uploader = await User.findByPk(idUtilisateur);
-      const titreNotif = 'Nouveau fichier ajouté';
-      const contenuNotif = `${uploader.nom} ${uploader.prenom} a ajouté un nouveau fichier au projet ${projet.nomProjet}.`;
-      for (const membre of membres) {
-        if (membre.idUtilisateur !== idUtilisateur) {
-            const notificationData = {
-                titreNotif,
-                contenuNotif,
-                idUtilisateur: membre.idUtilisateur,
-                idProjet: idProjet
-            };
-            await notificationController.createNotif(notificationData);
-        }
+      where: { idProjet } 
+    });
+    const uploader = await User.findByPk(idUtilisateur);
+    const titreNotif = 'Nouveau fichier ajouté';
+    const contenuNotif = `${uploader.nom} ${uploader.prenom} a ajouté un nouveau fichier au projet ${projet.nomProjet}.`;
+    
+    const notificationList = membres
+      .filter(membre => membre.idUtilisateur !== idUtilisateur)
+      .map(membre => ({
+        titreNotif,
+        contenuNotif,
+        idUtilisateur: membre.idUtilisateur,
+        idProjet: idProjet
+      }));
+
+    if (notificationList.length > 0) {
+      await notificationController.bulkCreateNotif(notificationList);
     }
     res.status(201).json(createdFile);
    
 
   } catch (error) {
-    console.error('Error uploading file:', error);
+    logger.error('Error uploading file:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
@@ -123,14 +131,21 @@ async function getAllFiles(req, res) {
 
   try {
     // Récupérer les fichiers associés au projet depuis la base de données
-    const fichiers = await Fichier.findAll({
+    let fichiers = await Fichier.findAll({
       where: { idProjet },
       include: { model: User, attributes: ['nomUtilisateur', 'nom', 'prenom','image'] }
     });
 
+    // Mettre à jour les URLs avec des liens signés tout neufs
+    fichiers = await Promise.all(fichiers.map(async (f) => {
+      const plainF = f.get({ plain: true });
+      plainF.url = await minioClient.getFileUrl(f.publicId);
+      return plainF;
+    }));
+
     res.json(fichiers);
   } catch (error) {
-    console.error('Error retrieving all files:', error);
+    logger.error('Error retrieving all files:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
@@ -150,7 +165,7 @@ async function getFiles(req, res) {
 
     res.json(files);
   } catch (error) {
-    console.error('Error retrieving files:', error);
+    logger.error('Error retrieving files:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
@@ -165,7 +180,7 @@ async function searchFilesByName(req, res) {
       where: {
         idProjet,
         nomFichier: {
-          [Op.like]: `%${term}%`, // Searching for partial matches
+          [Op.iLike]: `%${term}%`, // Searching for partial matches
         },
       },
       include: { model: User, attributes: ['nomUtilisateur', 'nom', 'prenom','image'] }
@@ -173,7 +188,7 @@ async function searchFilesByName(req, res) {
 
     res.json(fichiers);
   } catch (error) {
-    console.error('Error searching files by name:', error);
+    logger.error('Error searching files by name:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
@@ -202,7 +217,7 @@ async function renameFile(req, res) {
 
     res.json({ message: 'File renamed successfully', file: renamedfichier });
   } catch (error) {
-    console.error('Error renaming file:', error);
+    logger.error('Error renaming file:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }
@@ -228,22 +243,15 @@ async function deleteFile(req, res) {
       return res.status(404).json({ error: 'File not found in database' });
     }
 
-    const cloudinaryResult = await cloudinary.uploader.destroy(fichier.publicId);
-
+    // Supprimer de MinIO
+    await minioClient.deleteFile(fichier.publicId);
     
-    if (cloudinaryResult.result === 'ok') {
-      
-      await fichier.destroy();
+    // Supprimer de la DB
+    await fichier.destroy();
 
-      res.json({ message: 'File deleted successfully' });
-    } else {
-      
-      await fichier.destroy();
-
-      res.json({ message: 'File deleted from database (Cloudinary deletion ignored)' });
-    }
+    res.json({ message: 'File deleted successfully' });
   } catch (error) {
-    console.error('Error deleting file:', error);
+    logger.error('Error deleting file:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }

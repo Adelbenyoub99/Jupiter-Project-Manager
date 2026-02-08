@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const { User } = require('./1user');
+const User = require('./user');
 
 const Signal = sequelize.define('Signal', {
   idSignal: {

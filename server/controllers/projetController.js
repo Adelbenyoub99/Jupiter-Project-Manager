@@ -25,7 +25,7 @@ exports.createProject = async (req, res) => {
     const { nomProjet, descProjet, dureeFormatted, delaiProjet, visibiliteProjet } = req.body;
     const idUtilisateur = req.user.userId; 
     const generatedUrl = genererUrl();
-    console.log('idUtilisateur'+idUtilisateur)
+    logger.info('idUtilisateur'+idUtilisateur)
     try {
       // Créer le projet
       const newProjet = await Projet.create({
@@ -44,7 +44,7 @@ exports.createProject = async (req, res) => {
         idProjet: newProjet.idProjet,
         role: 'ChefProjet'
       };
-      console.log(participationData)
+      logger.info(participationData)
       await participationController.createParticipation(participationData);
      
       // Récupérer le projet avec les relations nécessaires
@@ -71,7 +71,7 @@ exports.createProject = async (req, res) => {
      
       
     } catch (error) {
-      console.error('Error creating project:', error);
+      logger.error('Error creating project:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   };
@@ -89,7 +89,7 @@ exports.getAllProjets = async (req, res) => {
         });
         res.status(200).json(projets);
     } catch (error) {
-        console.error('Error getting projects:', error);
+        logger.error('Error getting projects:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -106,7 +106,7 @@ exports.getProjetById = async (req, res) => {
         }
         res.status(200).json(projet);
     } catch (error) {
-        console.error('Error getting project by ID:', error);
+        logger.error('Error getting project by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -121,7 +121,7 @@ exports.getProjectUrl=async(req,res)=>{
         }
         res.status(200).json({ URL: projet.URL });
     } catch (error) {
-        console.error('Error getting project URL:', error);
+        logger.error('Error getting project URL:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -157,7 +157,7 @@ exports.getProjectByUrl = async (req, res) => {
         // Retournez le projet avec le rôle de l'utilisateur
         res.status(200).json({ project, userRole });
     } catch (error) {
-        console.error('Error getting project by URL:', error);
+        logger.error('Error getting project by URL:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -177,7 +177,7 @@ exports.getByUrl = async (req, res) => {
 
         res.status(200).json({ project});
     } catch (error) {
-        console.error('Error getting project by URL:', error);
+        logger.error('Error getting project by URL:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -202,14 +202,14 @@ exports.getProjectMembers = async (req, res) => {
         } 
 
         if (!projet.Membres) {
-            console.error('No users associated with this project:', projet);
+            logger.error('No users associated with this project:', projet);
             return res.status(404).json({ message: 'Members not found' });
         }
 
         const members = projet.Membres.map(user => user);
         res.status(200).json(members);
     } catch (error) {
-        console.error('Error getting project members:', error);
+        logger.error('Error getting project members:', error);
         res.status(500).json({ message: 'Internal server error', error: error });
     }
 };
@@ -256,7 +256,7 @@ exports.getPublicProjects = async (req, res) => {
 
         res.status(200).json(projectsWithMembersCountAndChef);
     } catch (error) {
-        console.error('Error getting public projects with members count and project leader:', error);
+        logger.error('Error getting public projects with members count and project leader:', error);
         res.status(500).json({ message: 'Internal server error', error: error });
     }
 };
@@ -265,7 +265,7 @@ exports.searchPublicProject =  async (req, res) => {
     try {
         const { search } = req.query;
         const normalizedSearch = search ? search.trim().toLowerCase().replace(/\s+/g, '') : '';
-        console.log(normalizedSearch);
+        logger.info(normalizedSearch);
 
         const publicProjects = await Projet.findAll({
             where: {
@@ -273,11 +273,11 @@ exports.searchPublicProject =  async (req, res) => {
                 [Op.or]: [
                     Sequelize.where(
                         Sequelize.fn('LOWER', Sequelize.fn('REPLACE', Sequelize.col('nomProjet'), ' ', '')),
-                        { [Op.like]: `%${normalizedSearch}%` }
+                        { [Op.iLike]: `%${normalizedSearch}%` }
                     ),
                     Sequelize.where(
                         Sequelize.fn('LOWER', Sequelize.fn('REPLACE', Sequelize.col('descProjet'), ' ', '')),
-                        { [Op.like]: `%${normalizedSearch}%` }
+                        { [Op.iLike]: `%${normalizedSearch}%` }
                     )
                 ]
             },
@@ -315,7 +315,7 @@ exports.searchPublicProject =  async (req, res) => {
 
         res.status(200).json(projectsWithMembersCountAndChef);
     } catch (error) {
-        console.error('Error getting public projects with members count and project leader:', error);
+        logger.error('Error getting public projects with members count and project leader:', error);
         res.status(500).json({ message: 'Internal server error', error: error });
     }
 };
@@ -359,7 +359,7 @@ exports.updateProjetById = async (req, res) => {
         }
         throw new Error('Project not found');
     } catch (error) {
-        console.error('Error updating project by ID:', error);
+        logger.error('Error updating project by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -395,7 +395,7 @@ exports.getUserPublicProject = async (req, res) => {
 
         res.status(200).json(projetPublicUser);
     } catch (error) {
-        console.error('Error getting public projects for user:', error);
+        logger.error('Error getting public projects for user:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -430,7 +430,7 @@ exports.getUserProject = async (req, res) => {
 
         res.status(200).json(projetUser);
     } catch (error) {
-        console.error('Error getting  projects for user:', error);
+        logger.error('Error getting  projects for user:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -511,7 +511,7 @@ exports.deleteProjetById = async (req, res) => {
 
         throw new Error('Project not found');
     } catch (error) {
-        console.error('Error deleting project by ID:', error);
+        logger.error('Error deleting project by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -599,7 +599,7 @@ exports.deleteProjetByAdmin = async (req, res) => {
 
         throw new Error('Project not found');
     } catch (error) {
-        console.error('Error deleting project by ID:', error);
+        logger.error('Error deleting project by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -608,7 +608,7 @@ exports.searchProject = async (req, res) => {
     try {
         const { search } = req.query;
         const normalizedSearch = search ? search.trim().toLowerCase().replace(/\s+/g, '') : '';
-        console.log('Normalized search:', normalizedSearch);
+        logger.info('Normalized search:', normalizedSearch);
 
         // Perform the search query
         const projectsWithMembersCountAndChef = await Projet.findAll({
@@ -616,11 +616,11 @@ exports.searchProject = async (req, res) => {
                 [Op.or]: [
                     Sequelize.where(
                         Sequelize.fn('LOWER', Sequelize.fn('REPLACE', Sequelize.col('nomProjet'), ' ', '')),
-                        { [Op.like]: `%${normalizedSearch}%` }
+                        { [Op.iLike]: `%${normalizedSearch}%` }
                     ),
                     Sequelize.where(
                         Sequelize.fn('LOWER', Sequelize.fn('REPLACE', Sequelize.col('descProjet'), ' ', '')),
-                        { [Op.like]: `%${normalizedSearch}%` }
+                        { [Op.iLike]: `%${normalizedSearch}%` }
                     )
                 ]
             },
@@ -634,7 +634,7 @@ exports.searchProject = async (req, res) => {
 
         res.status(200).json(projectsWithMembersCountAndChef);
     } catch (error) {
-        console.error('Error getting projects:', error);
+        logger.error('Error getting projects:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

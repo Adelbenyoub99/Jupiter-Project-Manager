@@ -8,7 +8,7 @@ exports.createMessage = async (req, res) => {
     const { idProjet } = req.params;
     try {
         const {contenuMsg} = req.body;
-        console.log(contenuMsg)
+        logger.info(contenuMsg)
         // Validate and sanitize the message content
         const sanitizedContent = xss(contenuMsg);
         const newMessage = await Message.create({ 
@@ -26,7 +26,7 @@ exports.createMessage = async (req, res) => {
 
         res.status(201).json(message);
     } catch (error) { 
-        console.error('Error creating message:', error);
+        logger.error('Error creating message:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -45,7 +45,7 @@ exports.deleteMessageById = async (req, res) => {
         }
         throw new Error('Message not found');
     } catch (error) {
-        console.error('Error deleting message by ID:', error);
+        logger.error('Error deleting message by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -64,7 +64,7 @@ exports.getMessageByUser = async (req, res) => {
         }
         res.status(200).json(messages);
     } catch (error) {
-        console.error('Error getting messages by user ID:', error);
+        logger.error('Error getting messages by user ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -82,7 +82,7 @@ exports.getMessageByIdProject = async (req, res) => {
         }
         res.status(200).json(messages);
     } catch (error) {
-        console.error('Error getting messages by project ID:', error);
+        logger.error('Error getting messages by project ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

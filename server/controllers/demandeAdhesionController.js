@@ -1,6 +1,7 @@
 const { DemandeAdhesion, Participation,Projet , User,Notification} = require('../models');
+const logger = require('../utils/logger');
 const participerContoller = require('./participerController');
-const notificatioController=require('./notificationController')
+const notificationController=require('./notificationController')
 const ms = require('ms');
 const { Op } = require("sequelize");
 // Create a new demande d'adhésion oui
@@ -23,10 +24,10 @@ exports.createDemandeAdhesion = async (req, res) => {
             idUtilisateur: projet.idChefProjet , 
             idProjet
         };
-        const notification=await notificatioController.createNotif(notificationData)
+        const notification=await notificationController.createNotif(notificationData)
         res.status(201).json({ demandeAdhesion});
     } catch (error) {
-        console.error('Error creating demande d\'adhésion:', error);
+        logger.error('Error creating demande d\'adhésion:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -37,7 +38,7 @@ exports.getAllDemandesAdhesion = async (req, res) => {
         const demandesAdhesion = await DemandeAdhesion.findAll();
         res.status(200).json(demandesAdhesion);
     } catch (error) {
-        console.error('Error getting demandes d\'adhésion:', error);
+        logger.error('Error getting demandes d\'adhésion:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -52,7 +53,7 @@ exports.getDemandeAdhesionById = async (req, res) => {
         }
         res.status(200).json(demandeAdhesion);
     } catch (error) {
-        console.error('Error getting demande d\'adhésion by ID:', error);
+        logger.error('Error getting demande d\'adhésion by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -60,7 +61,7 @@ exports.getDemandeAdhesionById = async (req, res) => {
 // Get demande d'adhésion by User ID oui
 exports.getDemandeByIdUser = async (req, res) => {
     const idUtilisateur = req.user.userId;
-    console.log('hello'+idUtilisateur);
+    logger.info('hello'+idUtilisateur);
     try {
         // Step 1: Fetch DemandeAdhesion entries for the user
         const demandesAdhesion = await DemandeAdhesion.findAll({
@@ -95,7 +96,7 @@ exports.getDemandeByIdUser = async (req, res) => {
 
         res.status(200).json(result);
     } catch (error) {
-        console.error('Error getting demandes by User ID:', error);
+        logger.error('Error getting demandes by User ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -119,7 +120,7 @@ exports.getDemandeByIdProject = async (req, res) => {
         }
         res.status(200).json(demandesAdhesion);
     } catch (error) {
-        console.error('Error getting demandes by Project ID:', error);
+        logger.error('Error getting demandes by Project ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -143,7 +144,7 @@ exports.getDemandeByIdProjectAttributeAccepteRefuse = async (req, res) => {
         }
         res.status(200).json(demandesAdhesion);
     } catch (error) {
-        console.error('Erreur lors de la récupération des demandes d\'adhésion:', error);
+        logger.error('Erreur lors de la récupération des demandes d\'adhésion:', error);
         res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 };
@@ -164,10 +165,10 @@ const scheduleDemandeDeletion = (idDemande) => {
                         }
                     }
                 });
-                console.log(`Demande d'adhésion avec ID ${idDemande} supprimée après 30 jours.`);
+                logger.info(`Demande d'adhésion avec ID ${idDemande} supprimée après 30 jours.`);
             }
         } catch (error) {
-            console.error('Error deleting expired demande d\'adhésion:', error);
+            logger.error('Error deleting expired demande d\'adhésion:', error);
         }
     });
 };
@@ -201,7 +202,7 @@ exports.updateEtatRefuser = async (req, res) => {
         idUtilisateur: demandeAdhesion.idUtilisateur , 
         idProjet : demandeAdhesion.idProjet
     };
-         await notificatioController.createNotif(notificationData)
+         await notificationController.createNotif(notificationData)
 
 
         const updatedDemandeAdhesion = await DemandeAdhesion.findByPk(id);
@@ -209,7 +210,7 @@ exports.updateEtatRefuser = async (req, res) => {
         return res.status(200).json({ message: 'Demande d\'adhésion mise à jour et sera supprimée après 30 jours', updatedDemandeAdhesion });
         
     } catch (error) {
-        console.error('Error updating demande d\'adhésion to Refuser:', error);
+        logger.error('Error updating demande d\'adhésion to Refuser:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -235,7 +236,7 @@ exports.updateEtatAnnuler = async (req, res) => {
         return res.status(200).json({ message: 'Demande d\'adhésion mise à jour et sera supprimée après 30 jours', updatedDemandeAdhesion });
 
     } catch (error) {
-        console.error('Error updating demande d\'adhésion to Annuler:', error);
+        logger.error('Error updating demande d\'adhésion to Annuler:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -286,7 +287,7 @@ exports.updateEtatAccepter = async (req, res) => {
             participation: participation});
 
     } catch (error) {
-        console.error('Error updating demande d\'adhésion to Accepter:', error);
+        logger.error('Error updating demande d\'adhésion to Accepter:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -305,7 +306,7 @@ exports.deleteDemandeAdhesionById = async (req, res) => {
         }
         throw new Error('Demande d\'adhésion not found');
     } catch (error) {
-        console.error('Error deleting demande d\'adhésion by ID:', error);
+        logger.error('Error deleting demande d\'adhésion by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

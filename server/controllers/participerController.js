@@ -9,7 +9,7 @@ exports.createParticipation = async (participationData) => {
         const participation = await Participation.create({ idUtilisateur, idProjet, role });
         return participation;
     } catch (error) {
-        console.error('Error creating participation:', error);
+        logger.error('Error creating participation:', error);
         throw new Error('Internal server error');
     }
 };
@@ -59,7 +59,7 @@ exports.createMembre = async (req, res) => {
 
       res.status(201).json(newParticipation);
     } catch (error) {
-      console.error('Error creating participation:', error);
+      logger.error('Error creating participation:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   };
@@ -109,7 +109,7 @@ exports.createFromSharedUrl = async (req, res) => {
       await notificationController.createNotif(notificationData);
       res.status(201).json(newParticipation);
     } catch (error) {
-      console.error('Error creating participation:', error);
+      logger.error('Error creating participation:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   };
@@ -119,7 +119,7 @@ exports.getAllParticipations = async (req, res) => {
         const participations = await Participation.findAll();
         res.status(200).json(participations);
     } catch (error) {
-        console.error('Error getting participations:', error);
+        logger.error('Error getting participations:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -139,7 +139,7 @@ exports.getParticipationById = async (req, res) => {
         }
         res.status(200).json(participation);
     } catch (error) {
-        console.error('Error getting participation by ID:', error);
+        logger.error('Error getting participation by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -158,7 +158,7 @@ exports.getProjectParticipation = async (req, res) => {
         }
         res.status(200).json({'membres':participations}); 
     } catch (error) {
-        console.error('Error getting participation by ID:', error);
+        logger.error('Error getting participation by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -199,7 +199,7 @@ exports.updateRoleColabToAdjoint = async (req, res) => {
       await notificationController.createNotif(notificationData);
         res.status(200).json({ message: 'Role updated to Adjoint successfully', participation });
     } catch (error) {
-        console.error('Error updating role:', error);
+        logger.error('Error updating role:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -235,7 +235,7 @@ exports.updateRoleAdjointToColab = async (req, res) => {
          await notificationController.createNotif(notificationData);
         res.status(200).json({ message: 'Role updated successfully', participation });
     } catch (error) {
-        console.error('Error updating role:', error);
+        logger.error('Error updating role:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -282,7 +282,7 @@ exports.deleteParticipationById = async (req, res) => {
         }
         throw new Error('Participation not found');
     } catch (error) {
-        console.error('Error deleting participation by ID:', error);
+        logger.error('Error deleting participation by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -327,7 +327,7 @@ exports.deleteParticipation = async (req, res) => {
         }
         throw new Error('Participation not found');
     } catch (error) {
-        console.error('Error deleting participation by ID:', error);
+        logger.error('Error deleting participation by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

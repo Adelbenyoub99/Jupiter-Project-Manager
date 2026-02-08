@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: jupiter_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-jupiter_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - jupiter_db_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./server
+    container_name: jupiter_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_NAME=${DB_NAME:-jupiter_db}
+      - DB_PORT=5432
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - CLIENT_URL=http://localhost:3000
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET=jupiter-storage
+    depends_on:
+      - db
+      - minio
+    volumes:
+      - ./server/uploads:/app/uploads
+      - ./server/logs:/app/logs
+
+  minio:
+    image: minio/minio
+    container_name: jupiter_minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    command: server /data --console-address ":9001"
+    volumes:
+      - jupiter_minio_data:/data
+
+  frontend:
+    build: ./client
+    container_name: jupiter_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  jupiter_db_data:
+  jupiter_minio_data:

@@ -1,92 +1,65 @@
 # JUPITER Project Manager
 
-JUPITER Project Manager est une plateforme de gestion de projets collaboratifs. Elle permet aux équipes de planifier, suivre et gérer leurs projets de manière efficace. JPM est basé sur le processus unifié (UP) et utilise le modèle de conception MVC, avec une implémentation utilisant la pile SERN (SQL, Express, React, Node.js).
+JUPITER Project Manager est une plateforme de gestion de projets collaboratifs permettant aux équipes de planifier, suivre et gérer leurs projets de manière efficace.
+Cette nouvelle version est entièrement **Dockerisée** et utilise **PostgreSQL** pour la persistance des données et **MinIO** pour le stockage des ressources S3-compatibles.
 
-## Fonctionnalités
+## 🚀 Démarrage Rapide
 
-- **Gestion des projets** : Création, modification et suppression de projets.
-- **Gestion des tâches** : Ajout, assignation, suivi et clôture des tâches.
-- **Ressources** : Ajout, modification et suppression de fichiers (pdf, txt, word, ppt et bien d'autres).
-- **Gestion des utilisateurs** : Enregistrement, authentification et gestion des rôles des utilisateurs.
-- **Tableaux de bord** : Visualisation des progrès des projets et des tâches en cours.
-- **Notifications** : Alertes et rappels pour les échéances et les mises à jour des tâches.
-- **Message** : Messagerie instantané.
+### Prérequis
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installé et en cours d'exécution.
 
-## Installation
+### Installation
 
-1. Clonez le dépôt :
-
-    ```sh
-    git clone https://github.com/Adelbenyoub99/jupiter-project-manager.git
+1.  **Copier l'environnement** :
+    ```powershell
+    cp server/.env.example server/.env
     ```
 
-2. Accédez au répertoire du projet :
+2.  **Lancer l'application** :
+    ```powershell
+    docker compose up -d
+    ```
+    *Cette commande télécharge les images, crée les containers et initialise les services (Base de données, Stockage, Backend, Frontend).*
 
-    ```sh
-    cd jupiter-project-manager
+3.  **Initialiser la base de données** (Optionnel - Déjà fait lors de la migration) :
+    ```powershell
+    docker exec jupiter_backend npx sequelize-cli db:migrate
+    docker exec jupiter_backend npx sequelize-cli db:seed:all
     ```
 
-3. Installez les dépendances backend et frontend :
+## 🔑 Identifiants de Test
 
-    ```sh
-    cd backend
-    npm install
-    cd ../frontend
-    npm install
-    ```
+L'application est pré-remplie avec des données de démonstration :
 
-4. Configurez la base de données dans le fichier de configuration `config.js` situé dans le répertoire `backend`.
+### Interface Utilisateur (Port 3000)
+- **Utilisateur Standard** :
+  - **Email** : `user@jupiter.com`
+  - **Mot de passe** : `user123`
+- **Administrateur** :
+  - **NomAdmin** : `admin`
+  - **Mot de passe** : `admin123`
 
-5. Démarrez le serveur backend :
+### MinIO Console (Port 9001)
+- **Login** : `minioadmin` (ou la valeur dans votre `.env`)
+- **Password** : `minioadmin` (ou la valeur dans votre `.env`)
 
-    ```sh
-    cd backend
-    npm start
-    ```
+## 🏗 Architecture Modernisée
 
-6. Démarrez l'application frontend :
+- **Frontend** : React (Port 3000) - Optimisé pour la production dans Nginx.
+- **Backend** : Node.js/Express (Port 5000) - Gestion des APIs et Socket.io.
+- **Base de Données** : PostgreSQL (Port 5432) - Gérée via migrations Sequelize.
+- **Stockage** : MinIO (API: 9000, Console: 9001) - Stockage sécurisé par URLs signées.
 
-    ```sh
-    cd frontend
-    npm start
-    ```
+## 🛠 Commandes Utiles
 
-7. Ouvrez votre navigateur et accédez à `http://localhost:3000` pour utiliser l'application.
+- **Voir les logs** : `docker compose logs -f`
+- **Arrêter tout** : `docker compose down`
+- **Reconstruire les images** : `docker compose up -d --build`
 
-## Structure du projet
+## 👥 Auteurs
 
-- **backend/** : Contient le code source du serveur Node.js/Express et les fichiers de configuration de la base de données.
-- **frontend/** : Contient le code source de l'application React.
-- **docs/** : Contient la documentation technique et les guides d'utilisation.
+- **BERKATI Farah** - Développeur Frontend
+- **BENYOUB Adel** - Développeur Backend
 
-## Contribuer
-
-1. Forkez le dépôt.
-2. Créez une branche pour vos modifications :
-
-    ```sh
-    git checkout -b feature/nom_de_votre_fonctionnalite
-    ```
-
-3. Commitez vos modifications :
-
-    ```sh
-    git commit -m "Ajout d'une nouvelle fonctionnalité"
-    ```
-
-4. Poussez vos modifications sur votre dépôt forké :
-
-    ```sh
-    git push origin feature/nom_de_votre_fonctionnalite
-    ```
-
-5. Ouvrez une Pull Request pour fusionner vos modifications dans le dépôt principal.
-
-## Auteurs
-
-- **BERKATI Farah** - Développeur Frontend - [Profil GitHub](https://github.com/F-Joy)
-- **BENYOUB Adel** - Développeur Backend - [Profil GitHub](https://github.com/Adelbenyoub99)
-
-## Remerciements
-
-- Merci à M. ALLEM KHALED pour l'encadrement et les conseils.
+---
+*Projet réalisé dans le cadre du Master Génie Logiciel.*

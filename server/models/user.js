@@ -40,7 +40,7 @@ const User = sequelize.define('User', {
     allowNull: true
   },
   numTel: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true
   },
   descProfile:{
@@ -97,11 +97,11 @@ Tache.hasMany(Assigner, { foreignKey: 'idTache' });
 Assigner.belongsTo(Tache, { foreignKey: 'idTache' });
 ///////////Plusieur users peut demander plusieur Projets///////////
 User.belongsToMany(Projet, {through :DemandeAdhesion , foreignKey: 'idUtilisateur',as:'demandeurs'})
-Projet.belongsToMany(User,{through: DemandeAdhesion, foreignKey: 'idProjet',as:'demandeurs'})
+Projet.belongsToMany(User,{through: DemandeAdhesion, foreignKey: 'idProjet',as:'demandeurs', onDelete: 'CASCADE', hooks: true})
 DemandeAdhesion.belongsTo(User ,{foreignKey:'idUtilisateur'})
-User.hasMany(DemandeAdhesion,{foreignKey:'idUtilisateur'})
+User.hasMany(DemandeAdhesion,{foreignKey:'idUtilisateur', onDelete: 'CASCADE', hooks: true})
 
-/////////////chemin complet de l'image de profil////////////////
+// Chemin pour les images locales par défaut (icons, etc)
 User.prototype.getImageUrl = function() {
   return `/uploadsIMG/${this.image}`;
 };

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const { Projet } = require('./projet');
-const { User } = require('./1user');
+const { User } = require('./user');
 
 const Participation = sequelize.define('Participation', {
     idParticipation : {
@@ -27,7 +27,8 @@ const Participation = sequelize.define('Participation', {
     references: {
       model: Projet,
       key: 'idProjet'
-    }
+    },
+    onDelete: 'CASCADE'
   },
   role: {
     type: DataTypes.ENUM('ChefProjet', 'Adjoint', 'Collaborateur'),

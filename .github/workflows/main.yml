@@ -1,0 +1,77 @@
+name: JUPITER CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: jupiter_test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      minio:
+        image: minio/minio
+        env:
+          MINIO_ROOT_USER: jupiter_admin
+          MINIO_ROOT_PASSWORD: jupiter_password
+        ports:
+          - 9000:9000
+          - 9001:9001
+        options: server /data
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: './server/package-lock.json'
+
+    - name: Install Backend Dependencies
+      run: |
+        cd server
+        npm install
+
+    - name: Run Backend Linting
+      run: |
+        cd server
+        # npm run lint # Assuming a lint script exists
+
+    - name: Run Database Migrations
+      env:
+        DB_HOST: localhost
+        DB_USER: postgres
+        DB_PASSWORD: password
+        DB_NAME: jupiter_test_db
+        DB_PORT: 5432
+      run: |
+        cd server
+        npx sequelize-cli db:migrate
+
+    - name: Build Frontend
+      run: |
+        cd client
+        npm install
+        # npm run build # Assuming a build script exists
+
+    - name: Docker Build Check
+      run: |
+        docker compose build

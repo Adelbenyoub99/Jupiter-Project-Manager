@@ -1,7 +1,7 @@
 const { where } = require('sequelize');
 const { Tache, Assigner, User,Projet,Notification } = require('../models');
 const moment = require('moment');
-const notificationControlller=require('./notificationController')
+const notificationController=require('./notificationController')
 // Create a new task
 exports.createTache = async (req, res) => {
     const { idProjet } = req.params; // Extract project ID from URL parameters
@@ -49,7 +49,7 @@ exports.createTache = async (req, res) => {
              idUtilisateur: idUtilisateur , 
             idProjet : idProjet
             };
-             await notificationControlller.createNotif(notificationData)
+             await notificationController.createNotif(notificationData)
       
 
 
@@ -71,7 +71,7 @@ exports.createTache = async (req, res) => {
         });
         res.status(201).json(createdTache);
     } catch (error) {
-        console.error('Error creating tache:', error);
+        logger.error('Error creating tache:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
   };
@@ -82,7 +82,7 @@ exports.getAllTaches = async (req, res) => {
         const taches = await Tache.findAll();
         res.status(200).json(taches);
     } catch (error) {
-        console.error('Error getting tasks:', error);
+        logger.error('Error getting tasks:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -121,7 +121,7 @@ exports.getTacheById = async (req, res) => {
 
         res.status(200).json(tache);
     } catch (error) {
-        console.error('Error getting task by ID:', error);
+        logger.error('Error getting task by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -159,20 +159,6 @@ exports.getTacheByProjetId = async (req, res) => {
             });
         }
 
-        const today = moment().startOf('day');
-
-        // Traiter les tâches pour mettre à jour leur statut si nécessaire
-        taches = taches.map(tache => {
-            const startDate = moment(tache.dateDebut).startOf('day');
-            const assignation = tache.Assigners && tache.Assigners.length > 0;
-
-            if (tache.statutTache === 'En attente' && assignation && startDate.isSameOrBefore(today)) {
-                tache.statutTache = 'En cours';
-            }
-
-            return tache;
-        });
-
         // Filtrer les tâches assignées à l'utilisateur
         const mesTaches = taches.filter(tache => 
             tache.Assigners.some(assigner => assigner.idUtilisateur === idUtilisateur)
@@ -184,7 +170,7 @@ exports.getTacheByProjetId = async (req, res) => {
             mesTaches: mesTaches
         });
     } catch (error) {
-        console.error('Error getting tasks by project ID:', error);
+        logger.error('Error getting tasks by project ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -217,28 +203,16 @@ exports.getTasksByUserId = async (req, res) => {
             attributes: ['idTache', 'nomTache', 'descTache', 'statutTache', 'dateDebut', 'dateFin', 'priorite', 'idProjet', 'createdAt', 'updatedAt']
         });
 
-        // Update the task status based on the current date
-        const today = moment().startOf('day');
-        const updatedTasks = tasks.map(task => {
-            const startDate = moment(task.dateDebut).startOf('day');
-            const assignation = task.Assigners && task.Assigners.length > 0;
 
-            if (task.statutTache === 'En attente' && assignation && startDate.isSameOrBefore(today)) {
-                task.statutTache = 'En cours';
-            }
-
-            return task;
-        });
-
-        res.status(200).json(updatedTasks);
+        res.status(200).json(tasks);
     } catch (error) {
-        console.error('Error getting tasks by user ID:', error);
+        logger.error('Error getting tasks by user ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
 exports.getAllUserTasks = async (req, res) => {
     const idUtilisateur = req.user.userId; 
-    console.log(idUtilisateur)
+    logger.info(idUtilisateur)
     try {
         // Check if the user exists
         const user = await User.findByPk(idUtilisateur);
@@ -261,22 +235,10 @@ exports.getAllUserTasks = async (req, res) => {
         
         });
 
-        // Update the task status based on the current date
-        const today = moment().startOf('day');
-        const updatedTasks = tasks.map(task => {
-            const startDate = moment(task.dateDebut).startOf('day');
-            const assignation = task.Assigners && task.Assigners.length > 0;
 
-            if (task.statutTache === 'En attente' && assignation && startDate.isSameOrBefore(today)) {
-                task.statutTache = 'En cours';
-            }
-
-            return task;
-        });
-
-        res.status(200).json(updatedTasks);
+        res.status(200).json(tasks);
     } catch (error) {
-        console.error('Error getting tasks by user ID:', error);
+        logger.error('Error getting tasks by user ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -343,7 +305,7 @@ exports.updateTacheById = async (req, res) => {
                    idProjet: updatedTache.idProjet
                };
 
-               await notificationControlller.createNotif(notificationData)
+               await notificationController.createNotif(notificationData)
            }
 
 
@@ -353,7 +315,7 @@ exports.updateTacheById = async (req, res) => {
 
         throw new Error('Task not found');
     } catch (error) {
-        console.error('Error updating task by ID:', error);
+        logger.error('Error updating task by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -410,7 +372,7 @@ exports.updateStatut = async (req, res) => {
                     idProjet: updatedTache.idProjet
                 };
 
-                await notificationControlller.createNotif(notificationData);   
+                await notificationController.createNotif(notificationData);   
                 }
 
                 
@@ -426,7 +388,7 @@ exports.updateStatut = async (req, res) => {
                 idProjet: updatedTache.idProjet
             };
 
-            await notificationControlller.createNotif(notificationDataChef);  
+            await notificationController.createNotif(notificationDataChef);  
             }
             // Create notification for project manager (chef de projet)
             
@@ -438,7 +400,7 @@ exports.updateStatut = async (req, res) => {
         // No task found with the given ID
         return res.status(404).json({ message: 'Task not found' });
     } catch (error) {
-        console.error('Error updating task status:', error);
+        logger.error('Error updating task status:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -458,20 +420,16 @@ exports.deleteTacheById = async (req, res) => {
                             model: User,
                             attributes: ['idUtilisateur', 'nom', 'prenom', 'image'] }  ] } ] });
                             const projet = await Projet.findByPk(tacheToDelete.idProjet) ;
-                          for (const assigner of tacheToDelete.Assigners) {
-                              const utilisateur = assigner.User;
-                                const titreNotif = `Tâche supprimée`;
-                                const contenuNotif = `La tâche : ${tacheToDelete.nomTache} dans le projet ${projet.nomProjet} a été supprimée.`;
-                    
-                                const notificationData = {
-                                    titreNotif,
-                                    contenuNotif,
-                                    idUtilisateur: utilisateur.idUtilisateur,
-                                    idProjet: tacheToDelete.idProjet
-                                };
-                    
-                                await notificationControlller.createNotif(notificationData);
-                            }
+            const notificationList = tacheToDelete.Assigners.map(assigner => ({
+                titreNotif: `Tâche supprimée`,
+                contenuNotif: `La tâche : ${tacheToDelete.nomTache} dans le projet ${projet.nomProjet} a été supprimée.`,
+                idUtilisateur: assigner.User.idUtilisateur,
+                idProjet: tacheToDelete.idProjet
+            }));
+
+            if (notificationList.length > 0) {
+                await notificationController.bulkCreateNotif(notificationList);
+            }
 
         // Delete assignations associated with the task
         await Assigner.destroy({
@@ -489,7 +447,7 @@ exports.deleteTacheById = async (req, res) => {
             throw new Error('Task not found');
         }
     } catch (error) {
-        console.error('Error deleting task by ID:', error);
+        logger.error('Error deleting task by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

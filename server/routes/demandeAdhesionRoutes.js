@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const demandeadhesionController = require('../Controllers/demandeAdhesionController');
+const demandeadhesionController = require('../controllers/demandeAdhesionController');
 const verifyToken = require('../middlewares/verifyToken');
 const verifyChefAndAdjoint = require('../middlewares/verifyChefAndAdjoint');
 const verifyChef = require('../middlewares/verifyChef');

@@ -9,7 +9,8 @@ const Assigner = sequelize.define('Assigner', {
     references: {
       model: 'User',
       key: 'idUtilisateur'
-    }
+    },
+    onDelete: 'CASCADE'
   },
   idTache: {
     type: DataTypes.INTEGER,
@@ -18,7 +19,8 @@ const Assigner = sequelize.define('Assigner', {
     references: {
       model: 'Tache',
       key: 'idTache'
-    }
+    },
+    onDelete: 'CASCADE'
   }
 }, {
   tableName: 'Assigner',

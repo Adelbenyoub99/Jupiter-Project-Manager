@@ -16,7 +16,7 @@ exports.createSignal = async (req, res) => {
         });
         res.status(201).json(signal);
     } catch (error) {
-        console.error('Error creating signal:', error);
+        logger.error('Error creating signal:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -37,7 +37,7 @@ exports.getSignalsByUserId = async (req, res) => {
 
         res.status(200).json(signals);
     } catch (error) {
-        console.error('Erreur lors de la récupération des signaux de l\'utilisateur:', error);
+        logger.error('Erreur lors de la récupération des signaux de l\'utilisateur:', error);
         res.status(500).json({ message: 'Erreur interne du serveur.' });
     }
 };
@@ -53,7 +53,7 @@ exports.getAllSignals = async (req, res) => {
         });
         res.status(200).json(signals);
     } catch (error) {
-        console.error('Error getting signals:', error);
+        logger.error('Error getting signals:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -68,7 +68,7 @@ exports.getSignalById = async (req, res) => {
         }
         res.status(200).json(signal);
     } catch (error) {
-        console.error('Error getting signal by ID:', error);
+        logger.error('Error getting signal by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -92,7 +92,7 @@ exports.updateSignalById = async (req, res) => {
         }
         throw new Error('Signal not found');
     } catch (error) {
-        console.error('Error updating signal by ID:', error);
+        logger.error('Error updating signal by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -119,7 +119,7 @@ exports.deleteSignalById = async (req, res) => {
         }
         throw new Error('Signal not found');
     } catch (error) {
-        console.error('Error deleting signal by ID:', error);
+        logger.error('Error deleting signal by ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

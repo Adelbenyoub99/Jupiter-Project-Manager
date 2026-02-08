@@ -33,9 +33,10 @@ const {Projet} = require('./projet')
       publicId: {
         type: DataTypes.STRING,
         allowNull: false,
+        comment: 'Object Key in MinIO'
       },
       url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT, // Presigned URLs can be long
         allowNull: false,
       },
       Type: {

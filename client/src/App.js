@@ -7,10 +7,10 @@ import WorkSpace from "./pages/workSpace";
 import DashBoard from "./pages/dashBoard";
 import ProjetsPublics from "./pages/projetPublic";
 import Support from "./pages/support";
-import GestionProjet from "./pages/gastionProjet";
+import GestionProjet from "./pages/gestionProjet";
 import AcceptPartage from "./pages/acceptPartage";
 import ForgotPassword from "./pages/ForgotPassword";
-import ReserPassWord from "./pages/ReserPassWord";
+import ResetPassword from "./pages/ResetPassword";
 import { NotificationProvider } from "./notificationContext";
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
         <Route path="/Register" element={<Register/>}/>
         <Route path="/WorkSpace" element={<WorkSpace/>}/>
         <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
-        <Route path="/resetPSW/:token" element={<ReserPassWord/>}/>
+        <Route path="/resetPSW/:token" element={<ResetPassword/>}/>
         <Route path="/gestionProjet/:projectUrl" element={<GestionProjet/>}/>
         <Route path="/AdminDashBoard" element={<DashBoard/>}/>
         <Route path="/ProjetsPublics" element={<ProjetsPublics/>}/>

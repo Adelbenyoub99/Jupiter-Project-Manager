@@ -11,6 +11,11 @@ const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
 const bodyParser = require('body-parser');
 const server = require('http').createServer(app);
+const { initBucket } = require('./utils/minioClient');
+
+// Initialiser le bucket MinIO au démarrage
+initBucket();
+
 const io = require('socket.io')(server, {
   cors: {
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
@@ -39,9 +44,13 @@ io.on('connection', (socket) => {
 
 
 
-// Charger les informations de configuration Cloudinary depuis le fichier JSON
-const cloudinaryConfig = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'cloudinary_config.json')));
-cloudinary.config(cloudinaryConfig);
+// Configurer Cloudinary depuis les variables d'environnement
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+});
 
 
 // Middleware pour parser les requêtes JSON
