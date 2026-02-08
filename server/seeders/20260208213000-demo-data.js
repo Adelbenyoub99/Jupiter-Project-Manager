@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const hashedAdminPassword = await bcrypt.hash('admin123', 10);
-    const hashedUserPassword = await bcrypt.hash('user123', 10);
+    const hashedUserPassword = await bcrypt.hash('ùser@del123', 10);
 
     // Seed Admins
     await queryInterface.bulkInsert('Admin', [{
@@ -19,7 +19,7 @@ module.exports = {
     await queryInterface.bulkInsert('User', [{
       nomUtilisateur: 'johndoe',
       motDePasse: hashedUserPassword,
-      email: 'user@jupiter.com',
+      email: 'adel.jupiter@gmail.com',
       nom: 'Doe',
       prenom: 'John',
       dateNaissance: new Date('1990-01-01'),
@@ -32,8 +32,9 @@ module.exports = {
 
     // Get the seeded user id
     const [users] = await queryInterface.sequelize.query(
-      `SELECT "idUtilisateur" from "User" WHERE email = 'user@jupiter.com';`
+      `SELECT "idUtilisateur" from "User" WHERE email = 'adel.jupiter@gmail.com';`
     );
+
     const userId = users[0].idUtilisateur;
 
     // Seed Projects

@@ -33,11 +33,12 @@ L'application est pré-remplie avec des données de démonstration :
 
 ### Interface Utilisateur (Port 3000)
 - **Utilisateur Standard** :
-  - **Email** : `user@jupiter.com`
-  - **Mot de passe** : `user123`
+  - **Email** : `adel.jupiter@gmail.com`
+  - **Mot de passe** : `ùser@del123`
 - **Administrateur** :
   - **NomAdmin** : `admin`
   - **Mot de passe** : `admin123`
+
 
 ### MinIO Console (Port 9001)
 - **Login** : `minioadmin` (ou la valeur dans votre `.env`)
