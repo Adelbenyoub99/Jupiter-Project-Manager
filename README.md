@@ -12,7 +12,7 @@ Cette nouvelle version est entièrement **Dockerisée** et utilise **PostgreSQL*
 
 1.  **Copier l'environnement** :
     ```powershell
-    cp server/.env.example server/.env
+    cp .env.example .env
     ```
 
 2.  **Lancer l'application** :
